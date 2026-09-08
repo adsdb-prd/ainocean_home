@@ -1,0 +1,498 @@
+/* ==========================================================================
+   Ainocean — standalone site stylesheet
+   Sections: 0) base  1) header  2) hero  3) content sections  4) footer
+             5) tablet (<=1024px)  6) mobile (<=900px)  7) small (<=560px)
+   ========================================================================== */
+
+/* ---------- 0) base ---------- */
+:root{
+  --ink:#05080A;
+  --ink-2:#0B1014;
+  --paper:#F5F7F6;
+  --paper-2:#E9EDEB;
+  --text:#F3F6F5;
+  --text-dark:#0A0F12;
+  --muted:#AEBAB7;
+  --muted-dark:#485754;
+  --mint:#3EF0C8;
+  --lime:#8EF577;
+  --green:#0C6F5E;
+  --hdr-h:64px;
+  --line:rgba(255,255,255,.10);
+  --line-dark:rgba(8,20,18,.10);
+}
+
+*{box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+
+body{
+  margin:0;
+  background:var(--ink);
+  overflow-x:hidden;
+}
+
+img{max-width:100%}
+
+/* Respect users who ask for less motion */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+
+/* ---------- 1) header ---------- */
+.hdr{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:100;
+  font-family:Pretendard,"Apple SD Gothic Neo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  transition:background .3s ease,border-color .3s ease;
+  border-bottom:1px solid transparent;
+}
+.hdr.solid{
+  background:rgba(5,8,10,.86);
+  -webkit-backdrop-filter:blur(14px);
+  backdrop-filter:blur(14px);
+  border-bottom-color:var(--line);
+}
+.hdr .inner{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 48px;
+  height:var(--hdr-h);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.brand{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.brand img{height:22px;width:auto;display:block}
+.menu{display:flex;align-items:center}
+.nav{display:flex;align-items:center;gap:2px}
+.nav a{
+  display:block;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:-.01em;
+  text-decoration:none;
+  color:rgba(243,246,245,.80);
+  padding:10px 13px;
+  border-radius:999px;
+  white-space:nowrap;
+  transition:color .2s ease,background .2s ease;
+}
+.nav a:hover{color:#fff;background:rgba(255,255,255,.09)}
+.nav a.active{color:var(--mint)}
+.lang{
+  display:flex;align-items:center;
+  margin-left:8px;padding-left:12px;
+  border-left:1px solid rgba(255,255,255,.18);
+}
+.lang a{
+  font-size:13px;font-weight:700;
+  text-decoration:none;
+  color:rgba(243,246,245,.50);
+  padding:8px 8px;
+}
+.lang a[aria-current="page"]{color:var(--mint)}
+.lang .sep{color:rgba(243,246,245,.28);font-size:12px}
+
+/* hamburger */
+.burger{
+  display:none;
+  width:44px;height:44px;
+  margin-right:-10px;
+  border:0;background:none;padding:0;
+  cursor:pointer;
+}
+.burger span{
+  display:block;
+  width:20px;height:2px;
+  margin:4px auto;
+  background:#F3F6F5;
+  border-radius:2px;
+  transition:transform .25s ease,opacity .2s ease;
+}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+/* ---------- 2) app shell + hero ---------- */
+#ain-app{
+  width:100%;
+  color:var(--text);
+  font-family:Pretendard,"Apple SD Gothic Neo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:16px;
+  line-height:1.75;
+  letter-spacing:-.01em;
+  text-align:left;
+  /* Korean wraps between characters by default, which breaks words mid-way.
+     keep-all wraps at spaces instead; overflow-wrap is the safety net. */
+  word-break:keep-all;
+  overflow-wrap:break-word;
+}
+#ain-app *{box-sizing:border-box}
+#ain-app .w{max-width:1200px;margin:0 auto;padding:0 48px}
+#ain-app .s{padding:132px 0;background:var(--ink);scroll-margin-top:var(--hdr-h)}
+#ain-app .p{background:var(--paper);color:var(--text-dark)}
+#ain-app .p2{background:var(--paper-2);color:var(--text-dark)}
+#ain-app h1{font-size:clamp(34px,5.2vw,66px);line-height:1.14;font-weight:800;letter-spacing:-.035em;margin:0}
+#ain-app h2{font-size:clamp(26px,3.4vw,43px);line-height:1.32;font-weight:750;letter-spacing:-.032em;margin:16px 0 18px}
+#ain-app h3{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0}
+#ain-app h1,#ain-app h2{text-wrap:balance}
+#ain-app .lead,#ain-app .card p,#ain-app .nc p{text-wrap:pretty}
+#ain-app p{margin:0}
+#ain-app a{text-decoration:none}
+#ain-app .lead{font-size:17.5px;line-height:1.8;color:var(--muted)}
+#ain-app .p .lead,#ain-app .p2 .lead{color:var(--muted-dark)}
+#ain-app .idx{display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;color:#7E8C89}
+#ain-app .idx b{color:var(--mint);font-weight:700}
+#ain-app .p .idx b,#ain-app .p2 .idx b{color:var(--green)}
+#ain-app .idx i{display:block;width:34px;height:1px;background:rgba(255,255,255,.18)}
+#ain-app .p .idx i,#ain-app .p2 .idx i{background:var(--line-dark)}
+#ain-app .hd{text-align:center;margin-bottom:64px;scroll-margin-top:var(--hdr-h)}
+#ain-app .mk{background:linear-gradient(transparent 74%,rgba(62,240,200,.24) 74%,rgba(142,245,119,.24) 100%)}
+#ain-app .btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-size:14.5px;font-weight:700;
+  border-radius:999px;padding:14px 24px;min-height:46px;
+  background:linear-gradient(100deg,var(--mint),var(--lime));
+}
+#ain-app a.btn,#ain-app a.btn:hover,#ain-app a.btn:visited{color:#04120E}
+#ain-app .btn.g{background:none;border:1px solid rgba(255,255,255,.24)}
+#ain-app a.btn.g,#ain-app a.btn.g:hover{color:var(--text)}
+
+/* background video */
+#ain-app .vid{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+#ain-app .bgv{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:100%;height:100%;
+  min-width:100%;min-height:100%;
+  object-fit:cover;
+  border:0;
+  display:block;
+}
+
+#ain-app .hero{
+  position:relative;
+  min-height:100vh;
+  min-height:100svh;
+  display:flex;align-items:center;
+  overflow:hidden;
+  background:var(--ink);
+  scroll-margin-top:0;
+}
+#ain-app .hero .ph{
+  position:absolute;inset:0;z-index:0;
+  background:url(../assets/img/hero-poster.jpg) center/cover no-repeat;
+}
+#ain-app .hero .sc{
+  position:absolute;inset:0;z-index:2;
+  background:linear-gradient(180deg,rgba(5,8,10,.66) 0%,rgba(5,8,10,.44) 34%,rgba(5,8,10,.76) 76%,var(--ink) 100%);
+}
+#ain-app .hi{position:relative;z-index:3;text-align:center;padding:calc(var(--hdr-h) + 72px) 0 32px;text-shadow:0 1px 22px rgba(0,0,0,.45)}
+#ain-app .hi .lead{margin:26px auto 0;color:#D7E0DD}
+#ain-app .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:40px}
+#ain-app .kpi{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  margin-top:88px;
+  border-top:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.14);
+}
+#ain-app .kpi>div{background:linear-gradient(180deg,rgba(5,8,10,.55),rgba(5,8,10,.9));padding:24px 8px 30px}
+#ain-app .kpi span{display:block;font-size:12.5px;color:#9AA6A3}
+#ain-app .kpi strong{display:block;font-size:clamp(22px,2.4vw,30px);font-weight:750;letter-spacing:-.03em;margin-top:6px}
+#ain-app .kpi em{font-style:normal;font-size:15px;font-weight:600;color:var(--muted);margin-left:4px}
+
+/* ---------- 3) content sections ---------- */
+/* 01 Why */
+#ain-app .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+#ain-app .card{background:#111820;border:1px solid var(--line);border-radius:22px;padding:32px 30px 28px}
+#ain-app .card .n{font-size:12.5px;color:#7E8C89}
+#ain-app .card h3{font-size:clamp(21px,2vw,25px);margin:22px 0 12px}
+#ain-app .card p{font-size:15.5px;color:var(--muted);line-height:1.7}
+#ain-app .card .fx{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-size:13.5px;color:var(--mint)}
+
+/* 02 Key Challenges */
+#ain-app .pl{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:56px 0;border-top:1px solid var(--line)}
+#ain-app .pl:last-of-type{border-bottom:1px solid var(--line)}
+#ain-app .pl.r .tx{order:2}
+#ain-app .pl .tag{display:inline-flex;gap:8px;font-size:12.5px;color:var(--muted);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:6px 14px}
+#ain-app .pl .tag b{color:var(--mint)}
+#ain-app .pl h3{font-size:clamp(23px,2.6vw,31px);margin:20px 0 12px}
+#ain-app .pl p{color:var(--muted);font-size:16.5px;max-width:46ch}
+#ain-app .pl img{width:100%;height:auto;display:block}
+#ain-app .st{height:56px;border-radius:56px 56px 0 0;margin-top:-8px;position:relative;z-index:1;background:var(--paper)}
+
+/* 03 Solution — comparison grid */
+#ain-app .cmp{display:grid;grid-template-columns:150px 1fr 1fr;border-top:1px solid var(--line-dark)}
+#ain-app .cmp>div{padding:20px 24px;border-bottom:1px solid var(--line-dark);font-size:15.5px;color:var(--muted-dark)}
+#ain-app .cmp .rh{font-size:13px;color:#7A8784}
+#ain-app .cmp .ch{padding:28px 24px;background:var(--paper-2);display:flex;align-items:center;justify-content:space-between;gap:18px}
+#ain-app .cmp .ch.nx{background:var(--ink-2);color:#fff;border-radius:16px 16px 0 0}
+#ain-app .cmp .ch .lb{font-size:12.5px;color:var(--muted-dark)}
+#ain-app .cmp .ch.nx .lb{color:var(--mint)}
+#ain-app .cmp .ch h3{font-size:clamp(21px,2.2vw,26px);margin-top:8px;line-height:1.25;letter-spacing:-.03em}
+#ain-app .cmp .ch .tt{flex:1 1 auto;min-width:min-content}
+#ain-app .cmp .ch .vz{flex:0 1 auto;min-width:0}
+#ain-app .cmp .ch img{display:block;width:auto}
+#ain-app .cmp .ch img.dn2{height:124px}
+#ain-app .cmp .ch img.bb{width:210px;max-width:100%;height:auto}
+#ain-app .cmp .cl.nx{background:var(--ink-2);color:#B9C4C1;border-bottom-color:rgba(255,255,255,.09)}
+#ain-app .cmp .cl.nx.lt{border-radius:0 0 16px 16px}
+/* label shown only when the grid collapses on mobile */
+#ain-app .cmp .cl .ml{display:none}
+
+/* 04 In Progress — timeline */
+#ain-app .tl{display:grid;grid-template-columns:repeat(4,1fr)}
+#ain-app .tl>div{padding-right:24px;position:relative}
+#ain-app .tl>div:before{content:"";position:absolute;top:7px;left:0;right:0;height:2px;background:rgba(8,20,18,.12)}
+#ain-app .tl .dn:before,#ain-app .tl .nw:before{background:var(--green)}
+#ain-app .tl .dt{width:15px;height:15px;border-radius:50%;background:var(--paper);border:2px solid rgba(8,20,18,.14);position:relative;z-index:2}
+#ain-app .tl .dn .dt,#ain-app .tl .nw .dt{background:var(--green);border-color:var(--green)}
+#ain-app .tl .nw .dt{box-shadow:0 0 0 6px rgba(12,111,94,.15)}
+#ain-app .tl .cp{display:inline-block;margin-top:20px;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:6px;background:rgba(12,111,94,.10);color:var(--green)}
+#ain-app .tl .nx2 .cp{background:rgba(8,20,18,.06);color:#78857F}
+#ain-app .tl h3{font-size:19px;margin:12px 0 8px}
+#ain-app .tl p{font-size:14.5px;color:var(--muted-dark);line-height:1.6;max-width:24ch}
+#ain-app .tl .wn{font-size:12.5px;color:#8A9793;margin-top:10px}
+
+/* photo cards (galleries) */
+#ain-app .nw3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:88px}
+#ain-app .nc{background:#fff;border:1px solid var(--line-dark);border-radius:16px;overflow:hidden}
+#ain-app .nc .th{aspect-ratio:3/2;background-size:cover;background-position:center;background-color:var(--text-dark);position:relative}
+#ain-app .nc .tg{position:absolute;top:12px;left:12px;font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:6px;background:rgba(5,8,10,.78);color:#fff}
+#ain-app .nc .bd{padding:18px 20px 22px}
+#ain-app .nc .wn{font-size:12.5px;color:#8A9793}
+#ain-app .nc h3{font-size:17px;margin:8px 0 7px;line-height:1.45;color:var(--text-dark)}
+#ain-app .nc p{font-size:14px;color:var(--muted-dark);line-height:1.6}
+
+/* 05 AI Data Center */
+#ain-app .cap{background:#fff;border:1px solid var(--line-dark);border-radius:24px;overflow:hidden}
+#ain-app .cap .tp{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;padding:48px 52px 42px;background:linear-gradient(180deg,#fff,#F2F6F4)}
+#ain-app .cap .big{display:flex;align-items:baseline;gap:4px;font-size:clamp(72px,10vw,124px);line-height:.9;font-weight:800;letter-spacing:-.06em;color:var(--text-dark)}
+#ain-app .cap .big em{font-style:normal;font-size:clamp(32px,4vw,50px);color:var(--green);line-height:1}
+#ain-app .cap .tl2{font-size:12.5px;color:var(--green);font-weight:700;margin-bottom:14px}
+#ain-app .cap .tp p{font-size:15.5px;color:var(--muted-dark);max-width:34ch;padding-bottom:10px}
+#ain-app .fct{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line-dark)}
+#ain-app .fct>div{padding:24px 26px;border-right:1px solid var(--line-dark)}
+#ain-app .fct>div:last-child{border-right:0}
+#ain-app .fct span{display:block;font-size:12.5px;color:#8A9793}
+#ain-app .fct strong{display:block;font-size:18px;font-weight:700;letter-spacing:-.02em;margin-top:6px;color:var(--text-dark)}
+#ain-app .note{font-size:12.5px;color:#8A9793;margin-top:14px}
+
+/* 06 Eco System */
+#ain-app .eco{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line-dark);border-radius:24px;background:#fff;overflow:hidden}
+#ain-app .eco>div{padding:38px 34px;border-right:1px solid var(--line-dark)}
+#ain-app .eco>div:last-child{border-right:0}
+#ain-app .eco .co{background:var(--ink-2);color:#fff}
+#ain-app .eco .rl{font-size:12.5px;color:#8A9793}
+#ain-app .eco .co .rl{color:var(--mint)}
+#ain-app .eco h3{font-size:24px;margin:10px 0 12px}
+#ain-app .eco p{font-size:15px;color:var(--muted-dark);line-height:1.65}
+#ain-app .eco .co p{color:#B9C4C1}
+#ain-app .lgh{margin:14px 0 16px;display:flex;align-items:center;min-height:34px}
+#ain-app .lgh img{height:28px;width:auto;max-width:100%;object-fit:contain;display:block}
+
+/* 07 Partnership — logo wall (logos are never cropped) */
+#ain-app .lgw{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:40px}
+#ain-app .lgi{
+  display:flex;align-items:center;justify-content:center;
+  height:96px;padding:18px 22px;
+  background:#fff;border:1px solid rgba(8,20,18,.08);border-radius:14px;
+}
+#ain-app .lgi img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}
+
+/* 08 News */
+#ain-app .nws{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px}
+#ain-app .na{
+  display:flex;flex-direction:column;
+  background:#fff;border:1px solid var(--line-dark);
+  border-radius:18px;overflow:hidden;
+  color:var(--text-dark);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+#ain-app .na:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(8,20,18,.10)}
+#ain-app .nth{height:190px;background-size:cover;background-position:center;background-color:var(--text-dark)}
+#ain-app .nbd{display:flex;flex-direction:column;gap:12px;padding:26px 26px 28px;flex:1 1 auto}
+#ain-app .na h3{font-size:19px;line-height:1.46;letter-spacing:-.022em;flex:1 1 auto;color:var(--text-dark)}
+#ain-app .na .wn{font-size:13px;color:#6C7A78}
+#ain-app .na .ar{font-size:14px;font-weight:700;color:#0F7A5A}
+
+/* Contact */
+#ain-app .fin{
+  position:relative;overflow:hidden;
+  min-height:640px;display:flex;align-items:center;
+  background:var(--ink);
+  scroll-margin-top:var(--hdr-h);
+}
+#ain-app .fin .ph{position:absolute;inset:0;z-index:0;background:url(../assets/img/contact-poster.jpg) center/cover no-repeat}
+#ain-app .fin .sc{position:absolute;inset:0;z-index:2;background:linear-gradient(90deg,rgba(5,8,10,.90) 0%,rgba(5,8,10,.60) 58%,rgba(5,8,10,.38) 100%)}
+#ain-app .fin .w{position:relative;z-index:3;padding-top:80px;padding-bottom:80px}
+#ain-app .fin h2{font-size:clamp(28px,4.2vw,52px);max-width:20ch}
+#ain-app .rt{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:760px;margin:36px 0 28px}
+#ain-app .rt>div{background:rgba(5,8,10,.55);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:18px 20px}
+#ain-app .rt b{display:block;font-size:15.5px}
+#ain-app .rt span{display:block;font-size:13px;color:var(--muted);margin-top:6px}
+
+/* ---------- 4) footer ---------- */
+#ain-app .ft{background:var(--ink);border-top:1px solid var(--line);padding:64px 0 40px}
+#ain-app .fg{display:grid;grid-template-columns:1.1fr 1.2fr 1fr;gap:48px}
+#ain-app .fg h4{font-size:12.5px;color:#7E8C89;font-weight:650;margin:0 0 14px}
+#ain-app .fg p{font-size:13.5px;color:var(--muted);line-height:1.85}
+#ain-app .fg .lg{height:26px;width:auto;display:block;margin-bottom:16px}
+#ain-app .fs{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+#ain-app .fs a{font-size:14.5px;color:var(--muted)}
+#ain-app .fs a:hover{color:var(--mint)}
+#ain-app .fb{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:#7E8C89}
+
+/* ---------- 5) tablet ---------- */
+@media (max-width:1024px){
+  #ain-app .w,.hdr .inner{padding:0 32px}
+  #ain-app .s{padding:104px 0}
+  #ain-app .nws{grid-template-columns:1fr 1fr}
+  #ain-app .lgw{grid-template-columns:repeat(4,1fr)}
+  #ain-app .cmp{grid-template-columns:120px 1fr 1fr}
+  #ain-app .cmp .ch img.dn2{height:96px}
+  #ain-app .cmp .ch img.bb{width:168px}
+  #ain-app .pl{gap:36px}
+  #ain-app .nav a{padding:10px 10px;font-size:13.5px}
+}
+
+/* ---------- 6) mobile ---------- */
+@media (max-width:900px){
+  :root{--hdr-h:56px}
+
+  /* header collapses into a hamburger panel */
+  .burger{display:block}
+  .hdr{background:rgba(5,8,10,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+  .hdr .inner{padding:0 20px}
+  .brand img{height:20px}
+  .menu{
+    position:absolute;top:var(--hdr-h);left:0;right:0;
+    background:rgba(5,8,10,.97);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+    padding:8px 12px 16px;
+    display:none;
+  }
+  .menu.open{display:block}
+  .nav{flex-direction:column;align-items:stretch;gap:2px}
+  .nav a{font-size:16px;padding:14px 12px;border-radius:12px}
+  .lang{
+    margin:10px 0 0;padding:12px 0 0;
+    border-left:0;border-top:1px solid var(--line);
+    justify-content:flex-start;gap:2px;
+  }
+  .lang a{font-size:15px;padding:12px 14px;border-radius:10px;background:rgba(255,255,255,.06)}
+
+  /* line breaks that only make sense on wide screens */
+  #ain-app br.nb{display:none}
+
+  #ain-app{font-size:16.5px;line-height:1.78}
+  #ain-app .w{padding:0 20px}
+  #ain-app .s{padding:76px 0}
+  #ain-app .hd{margin-bottom:40px}
+  #ain-app .lead{font-size:16px;line-height:1.75}
+
+  #ain-app .hero{min-height:auto}
+  /* stronger scrim on phones: the frame behind the copy is much brighter here */
+  #ain-app .hero .sc{background:linear-gradient(180deg,rgba(5,8,10,.74) 0%,rgba(5,8,10,.68) 45%,rgba(5,8,10,.86) 80%,var(--ink) 100%)}
+  #ain-app .hi{padding:calc(var(--hdr-h) + 76px) 0 64px}
+  #ain-app .hi .lead{color:#E4EBE8}
+  #ain-app .cta{margin-top:32px}
+  #ain-app .cta .btn{flex:1 1 auto;min-width:150px}
+  #ain-app .kpi{grid-template-columns:repeat(2,1fr);margin-top:56px}
+  #ain-app .kpi>div{padding:18px 10px 22px}
+
+  #ain-app .g3,#ain-app .nw3,#ain-app .eco,#ain-app .rt,#ain-app .fg,#ain-app .nws{grid-template-columns:1fr}
+  #ain-app .nw3{margin-top:48px;gap:16px}
+  #ain-app .card{padding:26px 22px 24px;border-radius:18px}
+  #ain-app .fct{grid-template-columns:1fr 1fr}
+  #ain-app .fct>div{padding:18px 20px}
+  #ain-app .fct>div:nth-child(odd){border-right:1px solid var(--line-dark)}
+  #ain-app .fct>div:nth-child(even){border-right:0}
+  #ain-app .fct>div:nth-child(-n+2){border-bottom:1px solid var(--line-dark)}
+  #ain-app .eco>div{border-right:0;border-bottom:1px solid var(--line-dark);padding:30px 24px}
+  #ain-app .eco>div:last-child{border-bottom:0}
+
+  #ain-app .pl{grid-template-columns:1fr;gap:24px;padding:40px 0}
+  #ain-app .pl.r .tx{order:0}
+  #ain-app .pl p{max-width:none}
+  #ain-app .st{height:40px;border-radius:40px 40px 0 0}
+
+  /* comparison grid: two columns, with each row label spanning the full width */
+  #ain-app .cmp{grid-template-columns:1fr 1fr;border-top:0;column-gap:10px}
+  #ain-app .cmp .rh{
+    grid-column:1 / -1;
+    display:block;
+    padding:22px 2px 6px;
+    border-bottom:0;
+    font-size:12.5px;font-weight:700;color:#7A8784;
+    background:none!important;
+  }
+  #ain-app .cmp .rh:empty{display:none;padding:0}
+  #ain-app .cmp .ch{
+    flex-direction:column;align-items:flex-start;gap:12px;
+    padding:18px 15px;border-radius:14px 14px 0 0;
+  }
+  #ain-app .cmp .ch h3{font-size:17px;line-height:1.3;margin-top:6px}
+  #ain-app .cmp .ch .lb{font-size:11.5px;line-height:1.4}
+  #ain-app .cmp .ch .vz{align-self:center}
+  #ain-app .cmp .ch img.dn2{height:64px}
+  #ain-app .cmp .ch img.bb{width:100%;max-width:148px}
+  #ain-app .cmp .cl{padding:12px 15px;font-size:14px;line-height:1.55;background:var(--paper-2)}
+  #ain-app .cmp .cl.lt{border-radius:0 0 14px 14px}
+
+  /* timeline becomes a vertical rail */
+  #ain-app .tl{grid-template-columns:1fr;gap:0}
+  #ain-app .tl>div{padding:0 0 28px 26px}
+  #ain-app .tl>div:last-child{padding-bottom:0}
+  #ain-app .tl>div:before{top:8px;bottom:0;left:6px;right:auto;width:2px;height:auto}
+  #ain-app .tl>div:last-child:before{display:none}
+  #ain-app .tl .dt{position:absolute;top:2px;left:0}
+  #ain-app .tl .cp{margin-top:0}
+  #ain-app .tl p{max-width:none}
+
+  #ain-app .cap{border-radius:18px}
+  #ain-app .cap .tp{flex-direction:column;align-items:flex-start;gap:18px;padding:30px 22px 26px}
+  #ain-app .cap .tp p{max-width:none;padding-bottom:0}
+
+  #ain-app .lgw{grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}
+  #ain-app .lgi{height:76px;padding:12px 14px;border-radius:12px}
+
+  #ain-app .nth{height:200px}
+  #ain-app .nbd{padding:22px 22px 24px;gap:10px}
+  #ain-app .na h3{font-size:18px}
+
+  #ain-app .fin{min-height:auto}
+  #ain-app .fin .w{padding-top:72px;padding-bottom:72px}
+  #ain-app .fin h2{max-width:none}
+  #ain-app .fin .sc{background:linear-gradient(180deg,rgba(5,8,10,.82) 0%,rgba(5,8,10,.72) 50%,rgba(5,8,10,.90) 100%)}
+  #ain-app .rt{margin:28px 0 24px}
+
+  #ain-app .ft{padding:48px 0 32px}
+  #ain-app .fg{gap:32px}
+  #ain-app .fb{margin-top:32px}
+}
+
+/* ---------- 7) small phones ---------- */
+@media (max-width:560px){
+  #ain-app .lgw{grid-template-columns:repeat(2,1fr)}
+  #ain-app .cta{flex-direction:column}
+  #ain-app .cta .btn{width:100%}
+  #ain-app .btn{padding:15px 20px}
+  #ain-app .fct{grid-template-columns:1fr}
+  #ain-app .fct>div{border-right:0!important;border-bottom:1px solid var(--line-dark)}
+  #ain-app .fct>div:last-child{border-bottom:0}
+  #ain-app .fb{flex-direction:column;gap:6px}
+}
+
+/* footer language links */
+#ain-app .fb a{color:#7E8C89}
+#ain-app .fb a:hover{color:var(--mint)}
