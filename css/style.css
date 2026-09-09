@@ -67,7 +67,7 @@ img{max-width:100%}
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:20px;
+  gap:clamp(24px,7vw,220px);
 }
 .brand{display:flex;align-items:center;gap:10px;flex:0 0 auto}
 .brand img{height:22px;width:auto;display:block}
@@ -245,15 +245,34 @@ img{max-width:100%}
 #ain-app .cmp .ch img.bb{width:210px;max-width:100%;height:auto}
 #ain-app .cmp .cl.nx{background:var(--ink-2);color:#B9C4C1;border-bottom-color:rgba(255,255,255,.09)}
 #ain-app .cmp .cl.nx.lt{border-radius:0 0 16px 16px}
-/* label shown only when the grid collapses on mobile */
-#ain-app .cmp .cl .ml{display:none}
 
 /* 04 In Progress — timeline */
 #ain-app .tl{display:grid;grid-template-columns:repeat(4,1fr)}
 #ain-app .tl>div{padding-right:24px;position:relative}
-#ain-app .tl>div:before{content:"";position:absolute;top:7px;left:0;right:0;height:2px;background:rgba(8,20,18,.12)}
+#ain-app .tl>div:before{
+  content:"";position:absolute;top:7px;left:0;right:0;height:2px;
+  background:rgba(8,20,18,.12);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform .75s cubic-bezier(.3,.7,.25,1);
+}
+#ain-app .tl.in>div:before{transform:scaleX(1)}
+#ain-app .tl>div:nth-child(1):before{transition-delay:.05s}
+#ain-app .tl>div:nth-child(2):before{transition-delay:.60s}
+#ain-app .tl>div:nth-child(3):before{transition-delay:1.15s}
+#ain-app .tl>div:nth-child(4):before{transition-delay:1.70s}
 #ain-app .tl .dn:before,#ain-app .tl .nw:before{background:var(--green)}
-#ain-app .tl .dt{width:15px;height:15px;border-radius:50%;background:var(--paper);border:2px solid rgba(8,20,18,.14);position:relative;z-index:2}
+#ain-app .tl .dt{
+  width:15px;height:15px;border-radius:50%;
+  background:var(--paper);border:2px solid rgba(8,20,18,.14);
+  position:relative;z-index:2;
+  opacity:0;transform:scale(.3);
+  transition:opacity .4s ease,transform .5s cubic-bezier(.2,1.6,.4,1);
+}
+#ain-app .tl.in .dt{opacity:1;transform:scale(1)}
+#ain-app .tl>div:nth-child(1) .dt{transition-delay:0s}
+#ain-app .tl>div:nth-child(2) .dt{transition-delay:.55s}
+#ain-app .tl>div:nth-child(3) .dt{transition-delay:1.10s}
+#ain-app .tl>div:nth-child(4) .dt{transition-delay:1.65s}
 #ain-app .tl .dn .dt,#ain-app .tl .nw .dt{background:var(--green);border-color:var(--green)}
 #ain-app .tl .nw .dt{box-shadow:0 0 0 6px rgba(12,111,94,.15)}
 #ain-app .tl .cp{display:inline-block;margin-top:20px;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:6px;background:rgba(12,111,94,.10);color:var(--green)}
@@ -299,14 +318,53 @@ img{max-width:100%}
 #ain-app .lgh{margin:14px 0 16px;display:flex;align-items:center;min-height:34px}
 #ain-app .lgh img{height:28px;width:auto;max-width:100%;object-fit:contain;display:block}
 
-/* 07 Partnership — logo wall (logos are never cropped) */
-#ain-app .lgw{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:40px}
-#ain-app .lgi{
-  display:flex;align-items:center;justify-content:center;
-  height:96px;padding:18px 22px;
-  background:#fff;border:1px solid rgba(8,20,18,.08);border-radius:14px;
+/* 07 Partnership — continuous logo band, no tiles or background.
+   Each row holds the same set of logos twice, so translating by -50%
+   lands exactly on the duplicate and the loop is seamless. */
+#ain-app .mq{
+  position:relative;margin-top:44px;
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
 }
-#ain-app .lgi img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}
+#ain-app .mqr{display:flex;width:max-content;animation:mqmove 60s linear infinite}
+#ain-app .mqr.rev{animation-direction:reverse}
+#ain-app .mqr+.mqr{margin-top:14px}
+#ain-app .mqg{display:flex;flex:0 0 auto}
+#ain-app .mqi{
+  flex:0 0 auto;
+  width:clamp(132px,13vw,190px);
+  height:clamp(60px,6vw,84px);
+  display:flex;align-items:center;justify-content:center;
+  padding:0 clamp(10px,1.4vw,20px);
+}
+#ain-app .mqi img{
+  max-width:100%;max-height:100%;width:auto;height:auto;
+  object-fit:contain;display:block;
+  opacity:.86;transition:opacity .3s ease,transform .3s ease;
+  /* a few supplied logos have a solid white box baked in; multiply drops it
+     into the light section background instead of showing a white rectangle */
+  mix-blend-mode:multiply;
+}
+#ain-app .mqi:hover img{opacity:1;transform:scale(1.06)}
+#ain-app .mq:hover .mqr,#ain-app .mq:focus-within .mqr{animation-play-state:paused}
+@keyframes mqmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* 06 Eco System — glowing line travelling around the border.
+   main.js sizes the viewBox and the dash pattern to the real box, so the
+   corners stay circular and the light moves at a constant speed. */
+#ain-app .ecow{position:relative;border-radius:24px}
+#ain-app .tracer{
+  position:absolute;inset:0;width:100%;height:100%;
+  overflow:visible;pointer-events:none;z-index:4;
+}
+#ain-app .tracer rect{
+  fill:none;
+  stroke:#8EF577;stroke-width:2.5;stroke-linecap:round;
+  filter:drop-shadow(0 0 4px rgba(142,245,119,.95)) drop-shadow(0 0 12px rgba(62,240,200,.55));
+  animation:trace 7s linear infinite;
+}
+@keyframes trace{to{stroke-dashoffset:var(--tr-len,-1000px)}}
 
 /* 08 News */
 #ain-app .nws{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px}
@@ -339,6 +397,17 @@ img{max-width:100%}
 #ain-app .rt>div{background:rgba(5,8,10,.55);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:18px 20px}
 #ain-app .rt b{display:block;font-size:15.5px}
 #ain-app .rt span{display:block;font-size:13px;color:var(--muted);margin-top:6px}
+
+/* reveal on scroll — main.js adds .rv, then .in when the element enters view */
+#ain-app .rv{
+  opacity:0;transform:translateY(30px);
+  transition:opacity .75s ease,transform .75s cubic-bezier(.22,.7,.2,1);
+  will-change:opacity,transform;
+}
+#ain-app .rv.in{opacity:1;transform:none;will-change:auto}
+
+/* inline row label for the comparison cells (only shown once stacked) */
+#ain-app .cmp .ml{display:none}
 
 /* ---------- 4) footer ---------- */
 #ain-app .ft{background:var(--ink);border-top:1px solid var(--line);padding:64px 0 40px}
@@ -396,14 +465,15 @@ img{max-width:100%}
 
   #ain-app{font-size:16.5px;line-height:1.78}
   #ain-app .w{padding:0 20px}
-  #ain-app .s{padding:76px 0}
-  #ain-app .hd{margin-bottom:40px}
+  #ain-app .s{padding:104px 0}
+  #ain-app .hd{margin-bottom:52px}
   #ain-app .lead{font-size:16px;line-height:1.75}
 
-  #ain-app .hero{min-height:auto}
+  /* keep the hero and contact footage tall so the video still reads as video */
+  #ain-app .hero{min-height:92svh}
   /* stronger scrim on phones: the frame behind the copy is much brighter here */
   #ain-app .hero .sc{background:linear-gradient(180deg,rgba(5,8,10,.74) 0%,rgba(5,8,10,.68) 45%,rgba(5,8,10,.86) 80%,var(--ink) 100%)}
-  #ain-app .hi{padding:calc(var(--hdr-h) + 76px) 0 64px}
+  #ain-app .hi{padding:calc(var(--hdr-h) + 56px) 0 56px}
   #ain-app .hi .lead{color:#E4EBE8}
   #ain-app .cta{margin-top:32px}
   #ain-app .cta .btn{flex:1 1 auto;min-width:150px}
@@ -411,7 +481,7 @@ img{max-width:100%}
   #ain-app .kpi>div{padding:18px 10px 22px}
 
   #ain-app .g3,#ain-app .nw3,#ain-app .eco,#ain-app .rt,#ain-app .fg,#ain-app .nws{grid-template-columns:1fr}
-  #ain-app .nw3{margin-top:48px;gap:16px}
+  #ain-app .nw3{margin-top:60px;gap:20px}
   #ain-app .card{padding:26px 22px 24px;border-radius:18px}
   #ain-app .fct{grid-template-columns:1fr 1fr}
   #ain-app .fct>div{padding:18px 20px}
@@ -421,33 +491,49 @@ img{max-width:100%}
   #ain-app .eco>div{border-right:0;border-bottom:1px solid var(--line-dark);padding:30px 24px}
   #ain-app .eco>div:last-child{border-bottom:0}
 
-  #ain-app .pl{grid-template-columns:1fr;gap:24px;padding:40px 0}
+  #ain-app .pl{grid-template-columns:1fr;gap:28px;padding:52px 0}
   #ain-app .pl.r .tx{order:0}
   #ain-app .pl p{max-width:none}
   #ain-app .st{height:40px;border-radius:40px 40px 0 0}
 
-  /* comparison grid: two columns, with each row label spanning the full width */
-  #ain-app .cmp{grid-template-columns:1fr 1fr;border-top:0;column-gap:10px}
-  #ain-app .cmp .rh{
-    grid-column:1 / -1;
+  /* comparison grid: the two models are stacked in series, each as its own
+     card, so a phone reads one model top to bottom before the next.
+     Flex order regroups the cells; the shared label column is swapped for
+     an inline label inside every cell. */
+  #ain-app .cmp{display:flex;flex-direction:column;border-top:0}
+  #ain-app .cmp .rh{display:none}
+  #ain-app .cmp .ml{
     display:block;
-    padding:22px 2px 6px;
-    border-bottom:0;
-    font-size:12.5px;font-weight:700;color:#7A8784;
-    background:none!important;
+    font-size:12px;font-weight:700;letter-spacing:0;
+    color:#7A8784;margin-bottom:3px;
   }
-  #ain-app .cmp .rh:empty{display:none;padding:0}
+  #ain-app .cmp .cl.nx .ml{color:rgba(62,240,200,.8)}
+  #ain-app .cmp>div:nth-child(2){order:1}
+  #ain-app .cmp>div:nth-child(5){order:2}
+  #ain-app .cmp>div:nth-child(8){order:3}
+  #ain-app .cmp>div:nth-child(11){order:4}
+  #ain-app .cmp>div:nth-child(14){order:5}
+  #ain-app .cmp>div:nth-child(3){order:6}
+  #ain-app .cmp>div:nth-child(6){order:7}
+  #ain-app .cmp>div:nth-child(9){order:8}
+  #ain-app .cmp>div:nth-child(12){order:9}
+  #ain-app .cmp>div:nth-child(15){order:10}
   #ain-app .cmp .ch{
-    flex-direction:column;align-items:flex-start;gap:12px;
-    padding:18px 15px;border-radius:14px 14px 0 0;
+    flex-direction:column;align-items:stretch;gap:18px;
+    padding:24px 20px 26px;border-radius:16px 16px 0 0;
   }
-  #ain-app .cmp .ch h3{font-size:17px;line-height:1.3;margin-top:6px}
-  #ain-app .cmp .ch .lb{font-size:11.5px;line-height:1.4}
+  #ain-app .cmp .ch h3{font-size:21px;line-height:1.28;margin-top:6px}
+  #ain-app .cmp .ch .lb{font-size:12px;line-height:1.4}
   #ain-app .cmp .ch .vz{align-self:center}
-  #ain-app .cmp .ch img.dn2{height:64px}
-  #ain-app .cmp .ch img.bb{width:100%;max-width:148px}
-  #ain-app .cmp .cl{padding:12px 15px;font-size:14px;line-height:1.55;background:var(--paper-2)}
-  #ain-app .cmp .cl.lt{border-radius:0 0 14px 14px}
+  #ain-app .cmp .ch img.dn2{height:88px}
+  #ain-app .cmp .ch img.bb{width:100%;max-width:250px}
+  #ain-app .cmp .cl{
+    padding:16px 20px;font-size:15px;line-height:1.6;
+    background:var(--paper-2);border-bottom:1px solid rgba(8,20,18,.07);
+  }
+  #ain-app .cmp .cl.nx{border-bottom-color:rgba(255,255,255,.08)}
+  #ain-app .cmp>div:nth-child(14){border-radius:0 0 16px 16px;border-bottom:0;margin-bottom:28px}
+  #ain-app .cmp>div:nth-child(15){border-radius:0 0 16px 16px;border-bottom:0}
 
   /* timeline becomes a vertical rail */
   #ain-app .tl{grid-template-columns:1fr;gap:0}
@@ -470,13 +556,13 @@ img{max-width:100%}
   #ain-app .nbd{padding:22px 22px 24px;gap:10px}
   #ain-app .na h3{font-size:18px}
 
-  #ain-app .fin{min-height:auto}
-  #ain-app .fin .w{padding-top:72px;padding-bottom:72px}
+  #ain-app .fin{min-height:82svh}
+  #ain-app .fin .w{padding-top:88px;padding-bottom:88px}
   #ain-app .fin h2{max-width:none}
   #ain-app .fin .sc{background:linear-gradient(180deg,rgba(5,8,10,.82) 0%,rgba(5,8,10,.72) 50%,rgba(5,8,10,.90) 100%)}
-  #ain-app .rt{margin:28px 0 24px}
+  #ain-app .rt{margin:32px 0 28px;gap:12px}
 
-  #ain-app .ft{padding:48px 0 32px}
+  #ain-app .ft{padding:60px 0 36px}
   #ain-app .fg{gap:32px}
   #ain-app .fb{margin-top:32px}
 }
@@ -491,6 +577,44 @@ img{max-width:100%}
   #ain-app .fct>div{border-right:0!important;border-bottom:1px solid var(--line-dark)}
   #ain-app .fct>div:last-child{border-bottom:0}
   #ain-app .fb{flex-direction:column;gap:6px}
+}
+
+/* footer language links */
+#ain-app .fb a{color:#7E8C89}
+#ain-app .fb a:hover{color:var(--mint)}
+
+/* ---------- 8) wide desktop: give the logo and the nav real distance ---------- */
+@media (min-width:1360px){
+  .hdr .inner{max-width:1500px;padding:0 56px}
+}
+@media (min-width:1700px){
+  .hdr .inner{max-width:1780px;padding:0 72px}
+}
+
+/* ---------- 9) intermediate widths ---------- */
+@media (max-width:1280px){
+  #ain-app .w{padding:0 40px}
+  #ain-app .cap .tp{padding:40px 40px 36px;gap:28px}
+  #ain-app .eco>div{padding:32px 26px}
+}
+@media (max-width:700px){
+  #ain-app .g3{gap:14px}
+  #ain-app .card .fx{margin-top:20px}
+  #ain-app .cap .big{letter-spacing:-.05em}
+  #ain-app .rt>div{padding:16px 18px}
+  #ain-app .mqr+.mqr{margin-top:4px}
+}
+
+/* ---------- 10) motion preferences ---------- */
+@media (prefers-reduced-motion:reduce){
+  /* the band becomes a plain scrollable row and nothing animates itself */
+  #ain-app .mqr{animation:none;width:auto}
+  #ain-app .mq{overflow-x:auto;-webkit-mask-image:none;mask-image:none}
+  #ain-app .mqg[aria-hidden="true"]{display:none}
+  #ain-app .tracer rect{animation:none;stroke-dasharray:none;opacity:.5}
+  #ain-app .rv,#ain-app .rv.in{opacity:1;transform:none}
+  #ain-app .tl>div:before{transform:scaleX(1)}
+  #ain-app .tl .dt{opacity:1;transform:none}
 }
 
 /* footer language links */
