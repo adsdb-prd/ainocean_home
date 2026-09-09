@@ -212,11 +212,14 @@ img{max-width:100%}
 /* ---------- 3) content sections ---------- */
 /* 01 Why */
 #ain-app .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-#ain-app .card{background:#111820;border:1px solid var(--line);border-radius:22px;padding:32px 30px 28px}
+#ain-app .card{display:flex;flex-direction:column;background:#111820;border:1px solid var(--line);border-radius:22px;padding:32px 30px 28px}
 #ain-app .card .n{font-size:12.5px;color:#7E8C89}
 #ain-app .card h3{font-size:clamp(21px,2vw,25px);margin:22px 0 12px}
 #ain-app .card p{font-size:15.5px;color:var(--muted);line-height:1.7}
-#ain-app .card .fx{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-size:13.5px;color:var(--mint)}
+/* auto margin keeps the response line flush with the bottom of every card,
+   so the three rules stay on one horizontal line however the copy wraps */
+#ain-app .card p:not(.n):not(.fx){margin-bottom:24px}
+#ain-app .card .fx{margin-top:auto;padding-top:16px;border-top:1px solid var(--line);font-size:13.5px;color:var(--mint)}
 
 /* 02 Key Challenges */
 #ain-app .pl{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:56px 0;border-top:1px solid var(--line)}
@@ -229,22 +232,95 @@ img{max-width:100%}
 #ain-app .pl img{width:100%;height:auto;display:block}
 #ain-app .st{height:56px;border-radius:56px 56px 0 0;margin-top:-8px;position:relative;z-index:1;background:var(--paper)}
 
-/* 03 Solution — comparison grid */
-#ain-app .cmp{display:grid;grid-template-columns:150px 1fr 1fr;border-top:1px solid var(--line-dark)}
-#ain-app .cmp>div{padding:20px 24px;border-bottom:1px solid var(--line-dark);font-size:15.5px;color:var(--muted-dark)}
-#ain-app .cmp .rh{font-size:13px;color:#7A8784}
-#ain-app .cmp .ch{padding:28px 24px;background:var(--paper-2);display:flex;align-items:center;justify-content:space-between;gap:18px}
-#ain-app .cmp .ch.nx{background:var(--ink-2);color:#fff;border-radius:16px 16px 0 0}
-#ain-app .cmp .ch .lb{font-size:12.5px;color:var(--muted-dark)}
-#ain-app .cmp .ch.nx .lb{color:var(--mint)}
-#ain-app .cmp .ch h3{font-size:clamp(21px,2.2vw,26px);margin-top:8px;line-height:1.25;letter-spacing:-.03em}
-#ain-app .cmp .ch .tt{flex:1 1 auto;min-width:min-content}
-#ain-app .cmp .ch .vz{flex:0 1 auto;min-width:0}
-#ain-app .cmp .ch img{display:block;width:auto}
-#ain-app .cmp .ch img.dn2{height:124px}
-#ain-app .cmp .ch img.bb{width:210px;max-width:100%;height:auto}
-#ain-app .cmp .cl.nx{background:var(--ink-2);color:#B9C4C1;border-bottom-color:rgba(255,255,255,.09)}
-#ain-app .cmp .cl.nx.lt{border-radius:0 0 16px 16px}
+/* 03 Solution — three AI models presented side by side.
+   Model 1 is the model in production (light card); models 2 and 3 are the
+   next-generation and future-vision models (dark cards), matching the
+   light/dark pairing used elsewhere on the site. */
+#ain-app .mdl{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+#ain-app .mc{
+  display:flex;flex-direction:column;
+  background:#fff;border:1px solid var(--line-dark);border-radius:22px;
+  padding:30px 28px 28px;
+}
+#ain-app .mc.nx{background:var(--ink-2);border-color:rgba(255,255,255,.10)}
+#ain-app .mc .mn{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--green)}
+#ain-app .mc.nx .mn{color:var(--mint)}
+#ain-app .mc h3{font-size:clamp(20px,1.9vw,24px);line-height:1.26;margin:12px 0 7px;color:var(--text-dark)}
+#ain-app .mc.nx h3{color:#fff}
+#ain-app .mc .mst{font-size:12.5px;line-height:1.5;color:#8A9793}
+#ain-app .mc.nx .mst{color:rgba(174,186,183,.9)}
+#ain-app .mc .mds{font-size:15px;line-height:1.7;color:var(--muted-dark);margin-top:18px}
+#ain-app .mc.nx .mds{color:#B9C4C1}
+
+/* pipeline: the three ordered stages each model runs through */
+#ain-app .mfl{
+  list-style:none;margin:22px 0 22px;padding:14px 16px;
+  border-radius:12px;background:rgba(8,20,18,.05);
+  display:grid;gap:8px;
+}
+#ain-app .mc.nx .mfl{background:rgba(255,255,255,.06)}
+#ain-app .mfl li{display:flex;gap:10px;font-size:13.5px;font-weight:650;line-height:1.4;color:var(--text-dark)}
+#ain-app .mc.nx .mfl li{color:#E7EEEC}
+#ain-app .mfl b{color:var(--green);font-weight:700;font-variant-numeric:tabular-nums}
+#ain-app .mc.nx .mfl b{color:var(--mint)}
+
+/* capability list — inside the disclosure panel */
+#ain-app .mft{list-style:none;margin:18px 0 20px;padding:0;display:grid;gap:13px}
+#ain-app .mft li{position:relative;padding-left:17px;font-size:14px;line-height:1.62;color:var(--muted-dark)}
+#ain-app .mc.nx .mft li{color:#B9C4C1}
+#ain-app .mft li:before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--green)}
+#ain-app .mc.nx .mft li:before{background:var(--mint)}
+#ain-app .mft b{display:block;font-weight:700;color:var(--text-dark)}
+#ain-app .mc.nx .mft b{color:#fff}
+
+/* closing line for each model */
+#ain-app .mcq{
+  padding:15px 17px;border-radius:12px;
+  background:rgba(8,20,18,.05);
+  font-size:13.5px;line-height:1.62;font-weight:600;color:#3C4B48;
+}
+#ain-app .mc.nx .mcq{background:rgba(255,255,255,.07);color:#D5DEDB}
+
+/* disclosure: the capability list and the closing line are collapsed by
+   default and open on the chevron. Native <details>, so it still works with
+   JavaScript disabled. margin-top:auto keeps the chevron on the bottom edge
+   of every card, so the three arrows line up while collapsed. */
+#ain-app .mx{
+  margin-top:auto;
+  border-top:1px solid var(--line-dark);
+}
+#ain-app .mc.nx .mx{border-top-color:rgba(255,255,255,.12)}
+/* once open, the divider follows the copy above it instead of being
+   pushed to the card's bottom edge */
+#ain-app .mx[open]{margin-top:0}
+/* one synchronous frame used by main.js to measure the collapsed height:
+   panels hidden, chevron back at the bottom. Never painted. */
+#ain-app .mdl.measuring .mxb{display:none}
+#ain-app .mdl.measuring .mx{margin-top:auto}
+#ain-app .mx>summary{
+  display:flex;align-items:center;justify-content:center;
+  height:42px;margin-bottom:-6px;
+  list-style:none;cursor:pointer;
+  color:var(--green);
+  border-radius:10px;
+  transition:background .2s ease,color .2s ease;
+}
+#ain-app .mx>summary::-webkit-details-marker{display:none}
+#ain-app .mx>summary::marker{content:""}
+#ain-app .mc.nx .mx>summary{color:var(--mint)}
+#ain-app .mx>summary:hover{background:rgba(8,20,18,.05)}
+#ain-app .mc.nx .mx>summary:hover{background:rgba(255,255,255,.07)}
+#ain-app .mx>summary:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+#ain-app .mc.nx .mx>summary:focus-visible{outline-color:var(--mint)}
+#ain-app .chv{
+  width:20px;height:20px;display:block;
+  fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round;
+  transition:transform .25s cubic-bezier(.3,.7,.25,1);
+}
+#ain-app .mx[open]>summary .chv{transform:rotate(180deg)}
+#ain-app .mxb{animation:mxopen .3s cubic-bezier(.22,.7,.2,1) both}
+@keyframes mxopen{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 
 /* 04 In Progress — timeline */
 #ain-app .tl{display:grid;grid-template-columns:repeat(4,1fr)}
@@ -406,9 +482,6 @@ img{max-width:100%}
 }
 #ain-app .rv.in{opacity:1;transform:none;will-change:auto}
 
-/* inline row label for the comparison cells (only shown once stacked) */
-#ain-app .cmp .ml{display:none}
-
 /* ---------- 4) footer ---------- */
 #ain-app .ft{background:var(--ink);border-top:1px solid var(--line);padding:64px 0 40px}
 #ain-app .fg{display:grid;grid-template-columns:1.1fr 1.2fr 1fr;gap:48px}
@@ -426,9 +499,7 @@ img{max-width:100%}
   #ain-app .s{padding:104px 0}
   #ain-app .nws{grid-template-columns:1fr 1fr}
   #ain-app .lgw{grid-template-columns:repeat(4,1fr)}
-  #ain-app .cmp{grid-template-columns:120px 1fr 1fr}
-  #ain-app .cmp .ch img.dn2{height:96px}
-  #ain-app .cmp .ch img.bb{width:168px}
+  #ain-app .mc{padding:26px 22px 24px}
   #ain-app .pl{gap:36px}
   #ain-app .nav a{padding:10px 10px;font-size:13.5px}
 }
@@ -496,44 +567,10 @@ img{max-width:100%}
   #ain-app .pl p{max-width:none}
   #ain-app .st{height:40px;border-radius:40px 40px 0 0}
 
-  /* comparison grid: the two models are stacked in series, each as its own
-     card, so a phone reads one model top to bottom before the next.
-     Flex order regroups the cells; the shared label column is swapped for
-     an inline label inside every cell. */
-  #ain-app .cmp{display:flex;flex-direction:column;border-top:0}
-  #ain-app .cmp .rh{display:none}
-  #ain-app .cmp .ml{
-    display:block;
-    font-size:12px;font-weight:700;letter-spacing:0;
-    color:#7A8784;margin-bottom:3px;
-  }
-  #ain-app .cmp .cl.nx .ml{color:rgba(62,240,200,.8)}
-  #ain-app .cmp>div:nth-child(2){order:1}
-  #ain-app .cmp>div:nth-child(5){order:2}
-  #ain-app .cmp>div:nth-child(8){order:3}
-  #ain-app .cmp>div:nth-child(11){order:4}
-  #ain-app .cmp>div:nth-child(14){order:5}
-  #ain-app .cmp>div:nth-child(3){order:6}
-  #ain-app .cmp>div:nth-child(6){order:7}
-  #ain-app .cmp>div:nth-child(9){order:8}
-  #ain-app .cmp>div:nth-child(12){order:9}
-  #ain-app .cmp>div:nth-child(15){order:10}
-  #ain-app .cmp .ch{
-    flex-direction:column;align-items:stretch;gap:18px;
-    padding:24px 20px 26px;border-radius:16px 16px 0 0;
-  }
-  #ain-app .cmp .ch h3{font-size:21px;line-height:1.28;margin-top:6px}
-  #ain-app .cmp .ch .lb{font-size:12px;line-height:1.4}
-  #ain-app .cmp .ch .vz{align-self:center}
-  #ain-app .cmp .ch img.dn2{height:88px}
-  #ain-app .cmp .ch img.bb{width:100%;max-width:250px}
-  #ain-app .cmp .cl{
-    padding:16px 20px;font-size:15px;line-height:1.6;
-    background:var(--paper-2);border-bottom:1px solid rgba(8,20,18,.07);
-  }
-  #ain-app .cmp .cl.nx{border-bottom-color:rgba(255,255,255,.08)}
-  #ain-app .cmp>div:nth-child(14){border-radius:0 0 16px 16px;border-bottom:0;margin-bottom:28px}
-  #ain-app .cmp>div:nth-child(15){border-radius:0 0 16px 16px;border-bottom:0}
+  /* the three models stack, so a phone reads one model top to bottom
+     before moving on to the next */
+  #ain-app .mdl{grid-template-columns:1fr}
+  #ain-app .mc{padding:26px 22px 24px;border-radius:18px}
 
   /* timeline becomes a vertical rail */
   #ain-app .tl{grid-template-columns:1fr;gap:0}
@@ -599,7 +636,7 @@ img{max-width:100%}
 }
 @media (max-width:700px){
   #ain-app .g3{gap:14px}
-  #ain-app .card .fx{margin-top:20px}
+  #ain-app .card p:not(.n):not(.fx){margin-bottom:20px}
   #ain-app .cap .big{letter-spacing:-.05em}
   #ain-app .rt>div{padding:16px 18px}
   #ain-app .mqr+.mqr{margin-top:4px}
@@ -612,11 +649,8 @@ img{max-width:100%}
   #ain-app .mq{overflow-x:auto;-webkit-mask-image:none;mask-image:none}
   #ain-app .mqg[aria-hidden="true"]{display:none}
   #ain-app .tracer rect{animation:none;stroke-dasharray:none;opacity:.5}
+  #ain-app .mxb{animation:none}
   #ain-app .rv,#ain-app .rv.in{opacity:1;transform:none}
   #ain-app .tl>div:before{transform:scaleX(1)}
   #ain-app .tl .dt{opacity:1;transform:none}
 }
-
-/* footer language links */
-#ain-app .fb a{color:#7E8C89}
-#ain-app .fb a:hover{color:var(--mint)}
