@@ -553,16 +553,22 @@ img{max-width:100%}
   #ain-app .hd{margin-bottom:52px}
   #ain-app .lead{font-size:16px;line-height:1.75}
 
-  /* keep the hero and contact footage tall so the video still reads as video */
-  #ain-app .hero{min-height:92svh}
-  /* stronger scrim on phones: the frame behind the copy is much brighter here */
-  #ain-app .hero .sc{background:linear-gradient(180deg,rgba(5,8,10,.74) 0%,rgba(5,8,10,.68) 45%,rgba(5,8,10,.86) 80%,var(--ink) 100%)}
-  #ain-app .hero .hi{padding-block:calc(var(--hdr-h) + 56px) 56px}
+  /* keep the hero and contact footage tall so the video still reads as video.
+     --hero-air is the breathing room above and below the copy: it is what lets
+     the footage read as footage on a phone instead of a texture behind text.
+     svh-based so a short phone does not end up with an endless hero. */
+  #ain-app .hero{--hero-air:clamp(64px,11svh,120px);min-height:100svh}
+  /* scrim on phones: the frame behind the copy is brighter here, so the middle
+     band stays dark enough to read while the top and bottom open up and the
+     last few percent still lands on --ink for a seamless join with 01 Why */
+  #ain-app .hero .sc{background:linear-gradient(180deg,rgba(5,8,10,.52) 0%,rgba(5,8,10,.62) 18%,rgba(5,8,10,.68) 46%,rgba(5,8,10,.60) 74%,rgba(5,8,10,.50) 88%,rgba(5,8,10,.86) 97%,var(--ink) 100%)}
+  #ain-app .hero .hi{padding-block:calc(var(--hdr-h) + var(--hero-air)) var(--hero-air)}
   #ain-app .hi .lead{color:#E4EBE8}
   #ain-app .cta{margin-top:32px}
   #ain-app .cta .btn{flex:1 1 auto;min-width:150px}
-  #ain-app .kpi{grid-template-columns:repeat(2,1fr);margin-top:56px}
-  #ain-app .kpi>div{padding:18px 10px 22px}
+  #ain-app .kpi{grid-template-columns:repeat(2,1fr);margin-top:clamp(40px,7svh,72px)}
+  /* lighter tiles: the footage carries on through the stat grid */
+  #ain-app .kpi>div{background:linear-gradient(180deg,rgba(5,8,10,.44),rgba(5,8,10,.78));padding:18px 10px 22px}
 
   #ain-app .g3,#ain-app .nw3,#ain-app .eco,#ain-app .rt,#ain-app .fg,#ain-app .nws{grid-template-columns:1fr}
   #ain-app .nw3{margin-top:60px;gap:20px}
@@ -662,3 +668,4 @@ img{max-width:100%}
   #ain-app .tl>div:before{transform:scaleX(1)}
   #ain-app .tl .dt{opacity:1;transform:none}
 }
+
