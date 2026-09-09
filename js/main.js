@@ -89,7 +89,6 @@
   // connections, or when the visitor prefers reduced motion we simply leave the
   // poster image in place and never download the file.
   function videoAllowed() {
-    if (window.innerWidth < 768) return false;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
     var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     if (c) {
@@ -136,4 +135,120 @@
       try { localStorage.setItem('ain-lang', a.dataset.lang || ''); } catch (err) { /* private mode */ }
     });
   });
+
+  /* ---------- 6) reveal elements as they scroll into view ---------- */
+  // Classes are added here rather than in the markup, so with JS disabled
+  // everything simply stays visible.
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    var groups = [
+      '#ain-app .hd',
+      '#ain-app .card',
+      '#ain-app .pl > div',
+      '#ain-app .cmp',
+      '#ain-app .nc',
+      '#ain-app .cap',
+      '#ain-app .note',
+      '#ain-app .ecow',
+      '#ain-app .mq',
+      '#ain-app .na',
+      '#ain-app .rt > div',
+      '#ain-app .fin h2',
+      '#ain-app .fin .lead',
+      '#ain-app .fin .btn',
+      '#ain-app .fg > div'
+    ];
+
+    var items = [];
+    groups.forEach(function (sel) {
+      Array.prototype.forEach.call(document.querySelectorAll(sel), function (el) {
+        if (el.closest('.hero')) return;          // the hero is already on screen
+        if (items.indexOf(el) === -1) items.push(el);
+      });
+    });
+
+    // Stagger siblings that share a parent so rows of cards cascade.
+    var seen = {};
+    items.forEach(function (el) {
+      el.classList.add('rv');
+      var key = el.parentNode.className + '|' + el.parentNode.tagName;
+      seen[key] = (seen[key] || 0) + 1;
+      var i = seen[key] - 1;
+      if (i > 0) el.style.transitionDelay = Math.min(i * 0.09, 0.45) + 's';
+    });
+
+    var rio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          rio.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
+
+    items.forEach(function (el) { rio.observe(el); });
+  }
+
+  /* ---------- 7) timeline: draw the rail left to right on arrival ---------- */
+  var tls = document.querySelectorAll('#ain-app .tl');
+  if (tls.length) {
+    if (reduce || !('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(tls, function (t) { t.classList.add('in'); });
+    } else {
+      var tio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            tio.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -20% 0px', threshold: 0.15 });
+      Array.prototype.forEach.call(tls, function (t) { tio.observe(t); });
+    }
+  }
+
+  /* ---------- 8) border tracer: size the SVG to the real box ---------- */
+  // A rect drawn at the element's pixel size keeps the corner radius circular
+  // and lets one dash travel the perimeter at a constant speed.
+  function sizeTracers() {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-tracer]'), function (box) {
+      var svg = box.querySelector('.tracer');
+      if (!svg) return;
+      var r = svg.querySelector('rect');
+      if (!r) return;
+
+      var w = box.clientWidth;
+      var h = box.clientHeight;
+      if (!w || !h) return;
+
+      var sw = 2.5;
+      var radius = parseFloat(getComputedStyle(box).borderTopLeftRadius) || 24;
+      var rx = Math.min(radius, (w - sw) / 2, (h - sw) / 2);
+
+      svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+      r.setAttribute('x', sw / 2);
+      r.setAttribute('y', sw / 2);
+      r.setAttribute('width', w - sw);
+      r.setAttribute('height', h - sw);
+      r.setAttribute('rx', rx);
+
+      var innerW = w - sw - 2 * rx;
+      var innerH = h - sw - 2 * rx;
+      var len = 2 * innerW + 2 * innerH + 2 * Math.PI * rx;
+
+      r.style.strokeDasharray = (len * 0.14) + ' ' + (len * 0.86);
+      r.style.setProperty('--tr-len', (-len) + 'px');
+    });
+  }
+
+  sizeTracers();
+  window.addEventListener('load', sizeTracers);
+  if ('ResizeObserver' in window) {
+    var ro = new ResizeObserver(sizeTracers);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-tracer]'), function (b) { ro.observe(b); });
+  } else {
+    window.addEventListener('resize', sizeTracers);
+  }
 })();
+
