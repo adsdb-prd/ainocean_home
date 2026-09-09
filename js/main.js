@@ -146,7 +146,7 @@
       '#ain-app .hd',
       '#ain-app .card',
       '#ain-app .pl > div',
-      '#ain-app .cmp',
+      '#ain-app .mc',
       '#ain-app .nc',
       '#ain-app .cap',
       '#ain-app .note',
@@ -208,7 +208,48 @@
     }
   }
 
-  /* ---------- 8) border tracer: size the SVG to the real box ---------- */
+  /* ---------- 8) model cards: freeze the collapsed height ---------- */
+  // The three cards used to stretch to the tallest sibling, so opening one
+  // disclosure made every card grow and pushed the closed chevrons down.
+  // Instead the grid no longer stretches and each card gets a min-height
+  // measured with all panels collapsed: opening one card grows only that card.
+  function sizeModelCards() {
+    Array.prototype.forEach.call(document.querySelectorAll('#ain-app .mdl'), function (grid) {
+      var cards = Array.prototype.slice.call(grid.querySelectorAll('.mc'));
+      if (!cards.length) return;
+
+      cards.forEach(function (c) { c.style.minHeight = ''; });
+
+      // single column on phones: equal heights would only add empty space
+      if (window.innerWidth <= 900) return;
+
+      // measure and restore within one frame, so this is never painted
+      grid.classList.add('measuring');
+      var tallest = 0;
+      cards.forEach(function (c) {
+        tallest = Math.max(tallest, c.getBoundingClientRect().height);
+      });
+      grid.classList.remove('measuring');
+
+      if (tallest > 0) {
+        var h = Math.ceil(tallest) + 'px';
+        cards.forEach(function (c) { c.style.minHeight = h; });
+      }
+    });
+  }
+
+  sizeModelCards();
+  window.addEventListener('load', sizeModelCards);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(sizeModelCards).catch(function () {});
+  }
+  var mcTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(mcTimer);
+    mcTimer = setTimeout(sizeModelCards, 150);
+  });
+
+  /* ---------- 9) border tracer: size the SVG to the real box ---------- */
   // A rect drawn at the element's pixel size keeps the corner radius circular
   // and lets one dash travel the perimeter at a constant speed.
   function sizeTracers() {
@@ -251,4 +292,3 @@
     window.addEventListener('resize', sizeTracers);
   }
 })();
-
