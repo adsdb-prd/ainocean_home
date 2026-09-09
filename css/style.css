@@ -195,7 +195,13 @@ img{max-width:100%}
   position:absolute;inset:0;z-index:2;
   background:linear-gradient(180deg,rgba(5,8,10,.66) 0%,rgba(5,8,10,.44) 34%,rgba(5,8,10,.76) 76%,var(--ink) 100%);
 }
-#ain-app .hi{position:relative;z-index:3;text-align:center;padding:calc(var(--hdr-h) + 72px) 0 32px;text-shadow:0 1px 22px rgba(0,0,0,.45)}
+#ain-app .hero{align-items:flex-start}
+/* .hero .hi outranks the generic "#ain-app .w" gutter rules, so the clearance
+   under the fixed header survives no matter where those rules sit in the file.
+   padding-block only: the left/right gutter still comes from .w.
+   margin-block:auto centres the copy when there is room and collapses to 0
+   when the copy is taller than the hero, so the top can never be clipped. */
+#ain-app .hero .hi{position:relative;z-index:3;text-align:center;margin-block:auto;padding-block:calc(var(--hdr-h) + 72px) 32px;text-shadow:0 1px 22px rgba(0,0,0,.45)}
 #ain-app .hi .lead{margin:26px auto 0;color:#D7E0DD}
 #ain-app .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:40px}
 #ain-app .kpi{
@@ -493,7 +499,14 @@ img{max-width:100%}
 #ain-app .fs a:hover{color:var(--mint)}
 #ain-app .fb{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:#7E8C89}
 
-/* ---------- 5) tablet ---------- */
+/* ---------- 5) intermediate widths ---------- */
+@media (max-width:1280px){
+  #ain-app .w{padding:0 40px}
+  #ain-app .cap .tp{padding:40px 40px 36px;gap:28px}
+  #ain-app .eco>div{padding:32px 26px}
+}
+
+/* ---------- 6) tablet ---------- */
 @media (max-width:1024px){
   #ain-app .w,.hdr .inner{padding:0 32px}
   #ain-app .s{padding:104px 0}
@@ -504,7 +517,7 @@ img{max-width:100%}
   #ain-app .nav a{padding:10px 10px;font-size:13.5px}
 }
 
-/* ---------- 6) mobile ---------- */
+/* ---------- 7) mobile ---------- */
 @media (max-width:900px){
   :root{--hdr-h:56px}
 
@@ -544,7 +557,7 @@ img{max-width:100%}
   #ain-app .hero{min-height:92svh}
   /* stronger scrim on phones: the frame behind the copy is much brighter here */
   #ain-app .hero .sc{background:linear-gradient(180deg,rgba(5,8,10,.74) 0%,rgba(5,8,10,.68) 45%,rgba(5,8,10,.86) 80%,var(--ink) 100%)}
-  #ain-app .hi{padding:calc(var(--hdr-h) + 56px) 0 56px}
+  #ain-app .hero .hi{padding-block:calc(var(--hdr-h) + 56px) 56px}
   #ain-app .hi .lead{color:#E4EBE8}
   #ain-app .cta{margin-top:32px}
   #ain-app .cta .btn{flex:1 1 auto;min-width:150px}
@@ -604,7 +617,16 @@ img{max-width:100%}
   #ain-app .fb{margin-top:32px}
 }
 
-/* ---------- 7) small phones ---------- */
+/* ---------- 8) narrow tablets / large phones ---------- */
+@media (max-width:700px){
+  #ain-app .g3{gap:14px}
+  #ain-app .card p:not(.n):not(.fx){margin-bottom:20px}
+  #ain-app .cap .big{letter-spacing:-.05em}
+  #ain-app .rt>div{padding:16px 18px}
+  #ain-app .mqr+.mqr{margin-top:20px}
+}
+
+/* ---------- 9) small phones ---------- */
 @media (max-width:560px){
   #ain-app .lgw{grid-template-columns:repeat(2,1fr)}
   #ain-app .cta{flex-direction:column}
@@ -620,7 +642,7 @@ img{max-width:100%}
 #ain-app .fb a{color:#7E8C89}
 #ain-app .fb a:hover{color:var(--mint)}
 
-/* ---------- 8) wide desktop: give the logo and the nav real distance ---------- */
+/* ---------- 10) wide desktop: give the logo and the nav real distance ---------- */
 @media (min-width:1360px){
   .hdr .inner{max-width:1500px;padding:0 56px}
 }
@@ -628,21 +650,7 @@ img{max-width:100%}
   .hdr .inner{max-width:1780px;padding:0 72px}
 }
 
-/* ---------- 9) intermediate widths ---------- */
-@media (max-width:1280px){
-  #ain-app .w{padding:0 40px}
-  #ain-app .cap .tp{padding:40px 40px 36px;gap:28px}
-  #ain-app .eco>div{padding:32px 26px}
-}
-@media (max-width:700px){
-  #ain-app .g3{gap:14px}
-  #ain-app .card p:not(.n):not(.fx){margin-bottom:20px}
-  #ain-app .cap .big{letter-spacing:-.05em}
-  #ain-app .rt>div{padding:16px 18px}
-  #ain-app .mqr+.mqr{margin-top:20px}
-}
-
-/* ---------- 10) motion preferences ---------- */
+/* ---------- 11) motion preferences ---------- */
 @media (prefers-reduced-motion:reduce){
   /* the band becomes a plain scrollable row and nothing animates itself */
   #ain-app .mqr{animation:none;width:auto}
