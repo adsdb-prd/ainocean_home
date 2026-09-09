@@ -405,7 +405,7 @@ img{max-width:100%}
 }
 #ain-app .mqr{display:flex;width:max-content;animation:mqmove 60s linear infinite}
 #ain-app .mqr.rev{animation-direction:reverse}
-#ain-app .mqr+.mqr{margin-top:14px}
+#ain-app .mqr+.mqr{margin-top:clamp(20px,3.4vw,44px)}
 #ain-app .mqg{display:flex;flex:0 0 auto}
 #ain-app .mqi{
   flex:0 0 auto;
@@ -639,7 +639,7 @@ img{max-width:100%}
   #ain-app .card p:not(.n):not(.fx){margin-bottom:20px}
   #ain-app .cap .big{letter-spacing:-.05em}
   #ain-app .rt>div{padding:16px 18px}
-  #ain-app .mqr+.mqr{margin-top:4px}
+  #ain-app .mqr+.mqr{margin-top:20px}
 }
 
 /* ---------- 10) motion preferences ---------- */
