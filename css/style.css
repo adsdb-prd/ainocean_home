@@ -202,7 +202,9 @@ img{max-width:100%}
    margin-block:auto centres the copy when there is room and collapses to 0
    when the copy is taller than the hero, so the top can never be clipped. */
 #ain-app .hero .hi{position:relative;z-index:3;text-align:center;margin-block:auto;padding-block:calc(var(--hdr-h) + 72px) 32px;text-shadow:0 1px 22px rgba(0,0,0,.45)}
-#ain-app .hi .lead{margin:26px auto 0;color:#D7E0DD}
+/* the hero headline is a single line now, so the gap under it carries the
+   openness: it scales with the viewport and never drops below 52px */
+#ain-app .hi .lead{margin:clamp(52px,6vw,84px) auto 0;color:#D7E0DD}
 #ain-app .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:40px}
 #ain-app .kpi{
   display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
@@ -668,4 +670,3 @@ img{max-width:100%}
   #ain-app .tl>div:before{transform:scaleX(1)}
   #ain-app .tl .dt{opacity:1;transform:none}
 }
-
