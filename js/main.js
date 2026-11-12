@@ -3,7 +3,7 @@
    1) header: solid background once the page is scrolled
    2) mobile menu toggle
    3) active nav link based on the section in view
-   4) background video: only fetched on wide screens / non-metered connections
+   4) background video: lazy loading with connection and motion preferences
    ========================================================================== */
 (function () {
   'use strict';
@@ -85,11 +85,12 @@
   }
 
   /* ---------- 4) background video ---------- */
-  // The two hero/contact videos are decoration. On narrow screens, on metered
-  // connections, or when the visitor prefers reduced motion we simply leave the
-  // poster image in place and never download the file.
+  // The two hero/contact videos are decoration. When data saving is enabled,
+  // the connection is slow, or reduced motion is preferred, keep the poster
+  // image in place instead of downloading the video.
   function videoAllowed() {
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+      return false;
     var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     if (c) {
       if (c.saveData) return false;
@@ -105,7 +106,10 @@
     v.dataset.loaded = '1';
     v.src = v.dataset.src;
     var p = v.play();
-    if (p && typeof p.catch === 'function') p.catch(function () { /* autoplay blocked: poster stays */ });
+    if (p && typeof p.catch === 'function')
+      p.catch(function () {
+        /* autoplay blocked: poster stays */
+      });
   }
 
   if (videos.length && videoAllowed()) {
@@ -121,7 +125,9 @@
         },
         { rootMargin: '200px 0px' }
       );
-      videos.forEach(function (v) { vio.observe(v); });
+      videos.forEach(function (v) {
+        vio.observe(v);
+      });
     } else {
       videos.forEach(loadVideo);
     }
@@ -132,7 +138,11 @@
   var langLinks = document.querySelectorAll('.lang a');
   Array.prototype.forEach.call(langLinks, function (a) {
     a.addEventListener('click', function () {
-      try { localStorage.setItem('ain-lang', a.dataset.lang || ''); } catch (err) { /* private mode */ }
+      try {
+        localStorage.setItem('ain-lang', a.dataset.lang || '');
+      } catch (err) {
+        /* private mode */
+      }
     });
   });
 
@@ -163,7 +173,7 @@
     var items = [];
     groups.forEach(function (sel) {
       Array.prototype.forEach.call(document.querySelectorAll(sel), function (el) {
-        if (el.closest('.hero')) return;          // the hero is already on screen
+        if (el.closest('.hero')) return; // the hero is already on screen
         if (items.indexOf(el) === -1) items.push(el);
       });
     });
@@ -178,33 +188,45 @@
       if (i > 0) el.style.transitionDelay = Math.min(i * 0.09, 0.45) + 's';
     });
 
-    var rio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in');
-          rio.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
+    var rio = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            rio.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -12% 0px', threshold: 0.05 }
+    );
 
-    items.forEach(function (el) { rio.observe(el); });
+    items.forEach(function (el) {
+      rio.observe(el);
+    });
   }
 
   /* ---------- 7) timeline: draw the rail left to right on arrival ---------- */
   var tls = document.querySelectorAll('#ain-app .tl');
   if (tls.length) {
     if (reduce || !('IntersectionObserver' in window)) {
-      Array.prototype.forEach.call(tls, function (t) { t.classList.add('in'); });
+      Array.prototype.forEach.call(tls, function (t) {
+        t.classList.add('in');
+      });
     } else {
-      var tio = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in');
-            tio.unobserve(entry.target);
-          }
-        });
-      }, { rootMargin: '0px 0px -20% 0px', threshold: 0.15 });
-      Array.prototype.forEach.call(tls, function (t) { tio.observe(t); });
+      var tio = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              tio.unobserve(entry.target);
+            }
+          });
+        },
+        { rootMargin: '0px 0px -20% 0px', threshold: 0.15 }
+      );
+      Array.prototype.forEach.call(tls, function (t) {
+        tio.observe(t);
+      });
     }
   }
 
@@ -218,7 +240,9 @@
       var cards = Array.prototype.slice.call(grid.querySelectorAll('.mc'));
       if (!cards.length) return;
 
-      cards.forEach(function (c) { c.style.minHeight = ''; });
+      cards.forEach(function (c) {
+        c.style.minHeight = '';
+      });
 
       // single column on phones: equal heights would only add empty space
       if (window.innerWidth <= 900) return;
@@ -233,7 +257,9 @@
 
       if (tallest > 0) {
         var h = Math.ceil(tallest) + 'px';
-        cards.forEach(function (c) { c.style.minHeight = h; });
+        cards.forEach(function (c) {
+          c.style.minHeight = h;
+        });
       }
     });
   }
@@ -278,8 +304,8 @@
       var innerH = h - sw - 2 * rx;
       var len = 2 * innerW + 2 * innerH + 2 * Math.PI * rx;
 
-      r.style.strokeDasharray = (len * 0.14) + ' ' + (len * 0.86);
-      r.style.setProperty('--tr-len', (-len) + 'px');
+      r.style.strokeDasharray = len * 0.14 + ' ' + len * 0.86;
+      r.style.setProperty('--tr-len', -len + 'px');
     });
   }
 
@@ -287,7 +313,9 @@
   window.addEventListener('load', sizeTracers);
   if ('ResizeObserver' in window) {
     var ro = new ResizeObserver(sizeTracers);
-    Array.prototype.forEach.call(document.querySelectorAll('[data-tracer]'), function (b) { ro.observe(b); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-tracer]'), function (b) {
+      ro.observe(b);
+    });
   } else {
     window.addEventListener('resize', sizeTracers);
   }
