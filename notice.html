@@ -78,6 +78,26 @@
       .sign {
         line-height: 1.9;
       }
+      ul.list li:has(a[aria-current="page"]) {
+        background: #e8edf3;
+        box-shadow: inset 3px 0 #526780;
+      }
+      ul.list a[aria-current="page"] {
+        font-weight: 700;
+      }
+      ul.list li > a {
+        padding-left: 4px;
+        overflow-wrap: anywhere;
+        word-break: keep-all;
+      }
+      ul.list time {
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      ul.list a:focus-visible {
+        outline: 2px solid #526780;
+        outline-offset: 2px;
+      }
     </style>
   </head>
   <body>
@@ -85,8 +105,26 @@
       <a class="home" href="/">← 아이노션 홈</a>
       <h1>전자공고</h1>
       <ul class="list">
-        <li><a href="notice-2.html">제3자배정 신주발행 공고 상세</a><span>2026-11-12</span></li>
-        <li><a href="#n20261112">신주발행 공고</a><span>2026-11-12</span></li>
+        <li>
+          <a href="notice.html" aria-current="page">신주발행 공고</a>
+          <time datetime="2026-11-12">2026-11-12</time>
+        </li>
+        <li>
+          <a href="notice-2.html">제3자배정 신주발행 공고 상세 (1)</a>
+          <time datetime="2026-11-12">2026-11-12</time>
+        </li>
+        <li>
+          <a href="notice-3.html">제3자배정 신주발행 공고 상세 (2)</a>
+          <time datetime="2026-11-12">2026-11-12</time>
+        </li>
+        <li>
+          <a href="notice-4.html">제3자배정 신주발행 공고 상세 (3)</a>
+          <time datetime="2026-11-12">2026-11-12</time>
+        </li>
+        <li>
+          <a href="notice-5.html">제3자배정 신주발행 공고 상세 (4)</a>
+          <time datetime="2026-11-12">2026-11-12</time>
+        </li>
       </ul>
 
       <article id="n20261112">
